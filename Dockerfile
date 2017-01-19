@@ -26,7 +26,7 @@ USER $USERID
 
 # Setup home directory
 RUN mkdir /home/calculator/work
-
+RUN mkdir /home/calculator/.jupyter
 
 
 WORKDIR /home/calculator/work
