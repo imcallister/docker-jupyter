@@ -31,5 +31,5 @@ RUN mkdir /home/calculator/.jupyter
 
 WORKDIR /home/calculator/work
 EXPOSE 8888
+ADD jupyter_notebook_config.py /home/calculator/.jupyter
 CMD ["jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0"]
-COPY jupyter_notebook_config.py /home/calculator/.jupyter/
