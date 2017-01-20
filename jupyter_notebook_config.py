@@ -7,4 +7,4 @@ c = get_config()
 if 'PASSWORD' in os.environ:
     from IPython.lib import passwd
     c.NotebookApp.password = passwd(os.environ['PASSWORD'])
-    del os.environ['PASSWORD']
+    #del os.environ['PASSWORD']
