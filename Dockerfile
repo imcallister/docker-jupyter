@@ -29,21 +29,26 @@ USER $USERID
 
 # Setup home directory
 RUN mkdir /home/$NBUSER/work
+RUN mkdir /home/$NBUSER/.jupyter
+
+COPY jupyter_notebook_config.py /home/$NBUSER/.jupyter/
 
 
 WORKDIR /home/$NBUSER/work
 EXPOSE 8888
 
 USER root
-# Add local files as late as possible to avoid cache busting
-COPY start.sh /usr/local/bin/
-COPY start-notebook.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/start-notebook.sh
 
 # Configure container startup
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["start-notebook.sh"]
 
+# Add local files as late as possible to avoid cache busting
+COPY start.sh /usr/local/bin/
+COPY start-notebook.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/start-notebook.sh
 
+
+USER $NBUSER
 
 
