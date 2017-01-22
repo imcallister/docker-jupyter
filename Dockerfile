@@ -12,24 +12,23 @@ RUN pip install --upgrade pip && pip install -r /tmp/requirements.txt && rm -f /
 ENV JUPYTER_HOME         /jupyter
 ENV JUPYTER_NOTEBOOK_DIR $JUPYTER_HOME/notebook
 ENV JUPYTER_PORT         8888
-ENV USERID 5000
+ENV NBID 5000
 ENV NBUSER scientist
 ENV NBGROUP scientist
 ENV TINI_VERSION v0.13.2
 
 
-RUN groupadd -g $USERID $NBUSER
-RUN useradd -u $USERID -g $NBUSER $NBGROUP
+RUN useradd -m -s /bin/bash -N -u $NBID $NBUSER
 
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
 RUN chmod +x /usr/bin/tini
 
 
-USER $USERID
+USER $NBUSER
 
 # Setup home directory
-RUN mkdir /home/$NBUSER/work
-RUN mkdir /home/$NBUSER/.jupyter
+RUN mkdir /home/$NBUSER/work && \
+	mkdir /home/$NBUSER/.jupyter
 
 COPY jupyter_notebook_config.py /home/$NBUSER/.jupyter/
 
@@ -47,7 +46,7 @@ CMD ["start-notebook.sh"]
 COPY start.sh /usr/local/bin/
 COPY start-notebook.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/start-notebook.sh
-
+RUN chown -R $NBUSER:users /home/$NBUSER/.jupyter
 
 USER $NBUSER
 
